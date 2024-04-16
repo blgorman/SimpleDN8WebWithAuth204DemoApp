@@ -38,8 +38,7 @@ namespace SimpleDN8WebWithAuth
             //WITHOUT KEY VAULT:
             //builder.Configuration.AddAzureAppConfiguration(appConfigConnection);
 
-            //With Key Vault:
-
+            //WITH KEY VAULT:
             builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
             {
                 config.AddAzureAppConfiguration(options =>
