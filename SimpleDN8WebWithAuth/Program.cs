@@ -26,6 +26,7 @@ namespace SimpleDN8WebWithAuth
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+            
             var appConfigConnection = builder.Configuration.GetConnectionString("AzureAppConfigConnection");
 
             /********************************************************************************************************
