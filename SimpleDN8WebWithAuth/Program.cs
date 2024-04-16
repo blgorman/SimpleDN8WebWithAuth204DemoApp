@@ -26,11 +26,16 @@ namespace SimpleDN8WebWithAuth
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
-
-            //use the connection string to connect to Azure App Configuration
-            //requires all app service and identity information to be authorized on app config [app data reader role, etc]
-            //WITHOUT KEY VAULT:
             var appConfigConnection = builder.Configuration.GetConnectionString("AzureAppConfigConnection");
+
+            /********************************************************************************************************
+            *  * Add Azure App Configuration
+            *  * use the connection string to connect to Azure App Configuration
+            *  * requires all app service and identity information to be authorized on app config [app data reader role, etc]
+            *  * for key vault => requires the user, app config, and app service to be authorized on the key vault
+            ********************************************************************************************************/
+
+            //WITHOUT KEY VAULT:
             //builder.Configuration.AddAzureAppConfiguration(appConfigConnection);
 
             //With Key Vault:
