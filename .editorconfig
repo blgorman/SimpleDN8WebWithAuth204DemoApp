@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# ASP0013: Suggest switching from using Configure methods to WebApplicationBuilder.Configuration
+dotnet_diagnostic.ASP0013.severity = silent
