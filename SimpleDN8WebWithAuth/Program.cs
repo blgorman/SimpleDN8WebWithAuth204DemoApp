@@ -34,9 +34,9 @@ namespace SimpleDN8WebWithAuth
                 if (env == null || !env.Trim().Equals("develop", StringComparison.OrdinalIgnoreCase))
                 {
                     //requires managed identity on both app service and app config
-                    var cred = new ManagedIdentityCredential();
-                    config.AddAzureAppConfiguration(options =>
-                                options.Connect(new Uri(settings["AzureAppConfigConnection"]), cred));
+                    // var cred = new ManagedIdentityCredential();
+                    // config.AddAzureAppConfiguration(options =>
+                    //             options.Connect(new Uri(settings["AzureAppConfigConnection"]), cred));
 
                     //enable this and disable the two lines above to utilize Key vault in combination with the Azure App Configuration:
                     //note: This required an access policy for key vault for the app service and app config
