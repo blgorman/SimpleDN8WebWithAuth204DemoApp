@@ -16,10 +16,12 @@ namespace SimpleDN8WebWithAuth
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            var cnstr = builder.Configuration.GetConnectionString("DefaultConnection") 
-                                                    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(cnstr));
+            var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(connectionString).Options;
+            using (var context = new ApplicationDbContext(contextOptions))
+            {
+                context.Database.Migrate();
+            }
+            
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
