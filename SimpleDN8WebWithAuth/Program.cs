@@ -27,36 +27,11 @@ namespace SimpleDN8WebWithAuth
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
-            builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                var settings = config.Build();
-                var env = settings["Application:Environment"];
-                if (env == null || !env.Trim().Equals("develop", StringComparison.OrdinalIgnoreCase))
-                {
-                    //requires managed identity on both app service and app config
-                    // var cred = new ManagedIdentityCredential();
-                    // config.AddAzureAppConfiguration(options =>
-                    //             options.Connect(new Uri(settings["AzureAppConfigConnection"]), cred));
-
-                    //enable this and disable the two lines above to utilize Key vault in combination with the Azure App Configuration:
-                    //note: This required an access policy for key vault for the app service and app config
-                    //config.AddAzureAppConfiguration(options =>
-                    //        options.Connect(new Uri(settings["AzureAppConfigConnection"]), cred)
-                    //                .ConfigureKeyVault(kv => { kv.SetCredential(cred); }));
-                }
-                else
-                {
-                    var cred = new DefaultAzureCredential();
-                    config.AddAzureAppConfiguration(options =>
-                        options.Connect(settings["AzureAppConfigConnection"]));
-
-                    //enable this and disable the two lines above to utilize Key vault in combination with the Azure App Configuration:
-                    //note: This required an access policy for key vault for the developer
-                    //config.AddAzureAppConfiguration(options =>
-                    //    options.Connect(settings["AzureAppConfigConnection"])
-                    //                    .ConfigureKeyVault(kv => { kv.SetCredential(cred); }));
-                }
-            });
+            //use the connection string to connect to Azure App Configuration
+            //requires all app service and identity information to be authorized on app config
+            //both app service and app config must have rights to the key vault
+            var appConfigConnection = builder.Configuration.GetConnectionString("AzureAppConfigConnection");
+            builder.Configuration.AddAzureAppConfiguration(appConfigConnection);
 
             var app = builder.Build();
 
@@ -66,25 +41,25 @@ namespace SimpleDN8WebWithAuth
                 app.UseMigrationsEndPoint();
             }
             else
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-app.UseRouting();
+            app.UseRouting();
 
-app.UseAuthorization();
+            app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapRazorPages();
 
-app.Run();
+            app.Run();
         }
     }
 }
