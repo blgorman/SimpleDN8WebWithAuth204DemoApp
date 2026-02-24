@@ -11,10 +11,10 @@ permissions:
       contents: read
 env:
   DOTNET_VERSION: '8.x'
-  SECRET_CLIENT_ID: ${{ secrets.WEB_DEPLOYMENT_MI_CLIENT_ID }}
-  SECRET_TENANT_ID: ${{ secrets.AZUREAPPSERVICE_TENANTID_4B636B2AC52B4D10B5E0ABB7C3204AF2 }}
-  SECRET_SUBSCRIPTION_ID:  ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_B6F960E5C22F4694BE1305A45B8181F9 }}
-  APP_NAME: 'mssaccad13az204demoapp'
+  SECRET_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  SECRET_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  SECRET_SUBSCRIPTION_ID:  ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  APP_NAME: 'your-app-name-here'
   
 jobs:
   build:
@@ -23,10 +23,10 @@ jobs:
       name: 'Production'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{env.DOTNET_VERSION}}
 
@@ -51,3 +51,4 @@ jobs:
           slot-name: 'Production'
           package: ${{env.DOTNET_ROOT}}/myapp
           
+
